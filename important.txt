@@ -1,0 +1,11 @@
+it will create migration table name as will model
+php artisan make:model notifications -m
+
+it will rolback last table
+php artisan migrate:rollback --step=1
+
+it will create model ,migration tabel name ,controller
+php artisan make:model Posts -crm
+
+it will create migration table and model in larvel
+php artisan make:model Model_Name -m
