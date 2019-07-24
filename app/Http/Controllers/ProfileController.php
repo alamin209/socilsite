@@ -126,27 +126,27 @@ class ProfileController extends Controller {
         public function notification($id){
              $user_id = Auth::user()->id;
              $allnotification = DB::table('notifications')
-                      ->LeftJoin('users','notifications.send_request','=','users.id')  
-                      ->where('loggedin_user', $user_id)
-                      ->where('notifications.id', '=', $id)
-                     ->get();
+                                ->LeftJoin('users','notifications.send_request','=','users.id')  
+                                ->where('loggedin_user', $user_id)
+                                ->where('notifications.id', '=', $id)
+                               ->get();
              $updatestatus = DB::table('notifications')
-                           ->where('id', '=', $id)
-                          ->update(['status' => 0]);
-             
+                                ->where('id', '=', $id)
+                               ->update(['status' => 0]);
+
              return view('profile.notification', compact('allnotification'));
 
         }
         public function unfriend($name,$id){
             $deletrequest = DB::table('friendships')
-                    ->where('requester', $id)
-                    ->delete();
+                            ->where('requester', $id)
+                            ->delete();
             if ($deletrequest) {
-                session()->flash('message', 'You delete friend  !' . $name);
-                return back();
+                        session()->flash('message', 'You delete friend  !' . $name);
+                        return back();
             } else {
-                session()->flash('message', 'Someting wrong !');
-                return back();
+                        session()->flash('message', 'Someting wrong !');
+                        return back();
             }
             
             
@@ -161,6 +161,11 @@ class ProfileController extends Controller {
           }else{
               $random=rand(1,500);
               $token_str=bcrypt($random);
+              $insert_token=DB::table('password_resets')->insert(
+                      ['email'=>$email,
+                       'token'=>$token_str,
+                        'created_at'=> \Carbon\Carbon::now()->toDateTimeString()]
+                      );
               $token= stripslashes($token_str);
               $bas_url='http://localhost/socilsite/settoken/'.$token;
 
@@ -170,15 +175,22 @@ class ProfileController extends Controller {
 
               $headers = "MIME-Version: 1.0" . "\r\n";
               $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
               $headers .= 'From: <admin@socilsite.com>' . "\r\n";
-//              $headers .= 'Cc: myboss@example.com' . "\r\n";
-
               mail($to,$subject,$message,$headers);
 
           }
-
-
+        }
+        public function set_pass(Request $request){
+            $email=$request->email;
+            $password=$request->password;
+            $password_confirmation=$request->password_confirmation;
+            if($password==$password_confirmation){
+                DB::table('users')->where('email',$email)->update(['password'=>$password]);
+                
+                return back();
+            }else{
+                echo "Passwoed and confirm Password do not match";
+            }
         }
                 
 

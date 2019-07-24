@@ -58,7 +58,11 @@ Route::get('forget-password',function(){
 Route::post('/settoken','ProfileController@settoken');
 
 Route::get('/settoken/{token}',function($token){
-
-echo $token;
+if(isset($token)&& $token!=""){
+    $getdata=DB::table('password_resets')->where('token',$token)->get();
+    if(count($getdata)!=0){
+        return view("profile.passwordresetfrom") ;
+    }
+}
 
 });
