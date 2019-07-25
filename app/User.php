@@ -21,11 +21,9 @@ class User extends Authenticatable {
         'name', 'email', 'password', 'gender', 'slug', 'pic'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    public function isRole(){
+        return $this->role; // mysql table column
+    }
     protected $hidden = [
         'password', 'remember_token','password'
     ];
