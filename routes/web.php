@@ -67,13 +67,13 @@ if(isset($token)&& $token!=""){
 
 });
 
-Route::group(['middleware' => 'auth','admin'], function() {
+Route::group(['middleware' => ['auth','admin']], function() {
 
     Route::get('/admin', function(){
         echo "it is admin";
     });
 });
-Route::group(['middleware' => 'auth','company'], function() {
+Route::group(['middleware' => ['auth','company']], function() {
 
     Route::get('/company', function(){
         echo "it is company";
